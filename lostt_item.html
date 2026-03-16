@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claim Missing Item | Lost & Found Portal</title>
+  <link rel="stylesheet" href="claim.css" />
+</head>
+<body>
+  <div class="claim-container">
+    <h2>Find Your Lost Item</h2>
+    <form id="claimForm">
+      <label>Full Name</label>
+      <input type="text" id="fullName" required />
+
+      <label>Email</label>
+      <input type="email" id="email" required />
+
+      <label>Phone</label>
+      <input type="tel" id="phone" required />
+
+      <label>Item Details</label>
+      <textarea id="itemDetails" required></textarea>
+
+      <label>Proof of Ownership</label>
+      <input type="file" id="proof" accept="image/*,application/pdf" />
+
+      <button type="submit">Submit Claim</button>
+    </form>
+  </div>
+
+  <script>
+    // Wait for the page to load fully
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("claimForm");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault(); // stop page refresh
+
+        // Get input values
+        const fullName = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const itemDetails = document.getElementById("itemDetails").value;
+        const proofFile = document.getElementById("proof").files[0];
+        const proof = proofFile ? proofFile.name : "No file uploaded";
+
+        // Create new claim object
+        const newClaim = { fullName, email, phone, itemDetails, proof };
+
+        // Get old data or start with empty array
+        let claims = JSON.parse(localStorage.getItem("claims")) || [];
+
+        // Add new claim
+        claims.push(newClaim);
+
+        // Save updated data to localStorage
+        localStorage.setItem("claims", JSON.stringify(claims));
+
+        alert("Claim submitted successfully!");
+
+        // Redirect to home page
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+</body>
+</html>

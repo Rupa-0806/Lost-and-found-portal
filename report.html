@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Lost Item | Lost & Found Portal</title>
+  <link rel="stylesheet" href="report.css">
+</head>
+<body>
+  <div class="report-container">
+    <h2>Report Lost Item</h2>
+    <p class="intro-text">Please fill out the details below to report your lost item.</p>
+
+    <form id="reportForm">
+      <label for="itemName">Item Name</label>
+      <input type="text" id="itemName" name="itemName" placeholder="Enter item name" required>
+
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="">-- Select Category --</option>
+        <option value="electronics">Electronics</option>
+        <option value="accessories">Accessories</option>
+        <option value="documents">Documents</option>
+        <option value="others">Others</option>
+      </select>
+
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4" placeholder="Describe the item and where you lost it" required></textarea>
+
+      <label for="location">Last Seen Location</label>
+      <input type="text" id="location" name="location" placeholder="E.g., Library, Bus Stop" required>
+
+      <label for="date">Date Lost</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="contact">Contact Information</label>
+      <input type="text" id="contact" name="contact" placeholder="Enter your phone/email" required>
+
+      <button type="submit">Submit Report</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const reportForm = document.getElementById("reportForm");
+
+      reportForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const itemName = document.getElementById("itemName").value.trim();
+        const category = document.getElementById("category").value;
+        const description = document.getElementById("description").value.trim();
+        const location = document.getElementById("location").value.trim();
+        const date = document.getElementById("date").value;
+        const contact = document.getElementById("contact").value.trim();
+
+        const lostItem = { itemName, category, description, location, date, contact };
+
+        // Get existing data
+        const lostItems = JSON.parse(localStorage.getItem("lostItems")) || [];
+
+        // Add new entry
+        lostItems.push(lostItem);
+
+        // Save back to Local Storage
+        localStorage.setItem("lostItems", JSON.stringify(lostItems));
+
+        alert("Lost item reported successfully!");
+
+        // Redirect to home page
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+</body>
+</html>

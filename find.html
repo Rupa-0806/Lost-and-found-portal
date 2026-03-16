@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claim Missing Item | Lost & Found Portal</title>
+  <link rel="stylesheet" href="claim.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="claim-container">
+    <h2>find your lost item</h2>
+    <p class="intro-text">Provide details to verify ownership and claim your lost item.</p>
+
+    <form>
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+      <label for="itemDetails">Item Details</label>
+      <textarea id="itemDetails" name="itemDetails" rows="4" placeholder="Describe the item you want to claim" required></textarea>
+
+      <label for="proof">Proof of Ownership</label>
+      <input type="file" id="proof" name="proof" accept="image/*,application/pdf">
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

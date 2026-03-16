@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>3D Animated Feedback Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1: #2575fc;       /* deep navy */
+    --bg2: #6a11cb;       /* darker */
+    --card: #2575fc;
+    --accent1: #6ee7b7;   /* mint */
+    --accent2: #60a5fa;   /* sky */
+    --muted: #94a3b8;
+    --glass: rgba(75, 94, 197, 0.04);
+    --glass-strong: rgba(255,255,255,0.06);
+    --max-w: 920px;
+    --radius: 18px;
+  }
+
+  /* Page bg */
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 20%, rgba(96,165,250,0.08), transparent),
+                radial-gradient(900px 500px at 90% 80%, rgba(110,231,183,0.04), transparent),
+                linear-gradient(180deg, var(--bg1), var(--bg2));
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 24px;
+  }
+
+  /* Page container */
+  .stage{
+    width:100%;
+    max-width:var(--max-w);
+    perspective:1400px;           /* for 3D tilt */
+  }
+
+  /* card (3D) */
+  .card {
+    margin:0 auto;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: var(--radius);
+    padding: 28px;
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:28px;
+    box-shadow:
+      0 18px 40px rgba(2,6,23,0.7),
+      0 2px 0 rgba(255,255,255,0.02) inset;
+    transform-style: preserve-3d;
+    transition: transform 450ms cubic-bezier(.2,.9,.2,1), box-shadow 300ms;
+    transform-origin: center;
+    align-items: center;
+    overflow:visible;
+    position:relative;
+  }
+
+  /* subtle entry animation */
+  .card {
+    animation: floatIn 700ms cubic-bezier(.18,.9,.32,1) both;
+  }
+  @keyframes floatIn{
+    from { transform: translateY(20px) rotateX(14deg) scale(.99); opacity:0 }
+    to   { transform: translateY(0) rotateX(0) scale(1); opacity:1 }
+  }
+
+  /* 3D tilt on hover */
+  .card:hover {
+    transform: rotateX(6deg) rotateY(-6deg) translateY(-6px) scale(1.01);
+    box-shadow:
+      0 40px 90px rgba(2,6,23,0.8),
+      0 6px 0 rgba(255,255,255,0.02) inset;
+  }
+
+  /* left panel - heading + decorative */
+  .card-left {
+    padding:18px;
+    position:relative;
+  }
+  .brand {
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:18px;
+  }
+  .logo {
+    height:56px;
+    width:56px;
+    border-radius:12px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+    box-shadow: 0 8px 20px rgba(96,165,250,0.14), 0 2px 8px rgba(110,231,183,0.06);
+    display:grid;
+    place-items:center;
+    font-weight:700;
+    color:#062036;
+    transform: translateZ(30px);
+  }
+  .brand h3{ margin:0; font-size:1.2rem; letter-spacing:0.2px}
+  .brand p{ margin:0; color:var(--muted); font-size:0.9rem }
+
+  .headline {
+    font-size:1.6rem;
+    margin:8px 0 10px;
+    line-height:1.08;
+    transform: translateZ(40px);
+  }
+  .sub {
+    color:var(--muted);
+    margin-bottom:18px;
+    transform: translateZ(30px);
+  }
+
+  /* floating decorative shapes */
+  .orb {
+    position:absolute;
+    right:-60px;
+    top:-36px;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(96,165,250,0.18), transparent 30%),
+                radial-gradient(circle at 70% 70%, rgba(110,231,183,0.12), transparent 30%);
+    filter: blur(12px);
+    transform: translateZ(10px) rotate(8deg);
+    opacity:0.9;
+    pointer-events:none;
+  }
+
+  /* right panel - form */
+  .form-wrap{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 14px;
+    padding:18px;
+    transform: translateZ(60px);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.45);
+  }
+
+  form{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .field {
+    position:relative;
+  }
+
+  label{
+    position:absolute;
+    left:14px;
+    top:12px;
+    font-size:0.88rem;
+    color:var(--muted);
+    background:transparent;
+    transition: transform 220ms ease, font-size 220ms ease, top 220ms ease;
+    pointer-events:none;
+  }
+
+  input[type="text"], input[type="email"], textarea {
+    width:100%;
+    padding:16px 14px;
+    padding-top:18px; /* room for label */
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    color: #eaf6ff;
+    font-size:0.96rem;
+    outline:none;
+    transition: border-color 180ms ease, transform 160ms ease, box-shadow 180ms ease;
+    resize:vertical;
+    min-height:44px;
+    box-shadow: 0 6px 14px rgba(2,6,23,0.45);
+  }
+
+  /* label float when focused or has content (using :not(:placeholder-shown)) */
+  input:focus, textarea:focus, input:not(:placeholder-shown) {
+    border-color: rgba(96,165,250,0.6);
+    box-shadow: 0 8px 24px rgba(96,165,250,0.06);
+    transform: translateY(-2px);
+  }
+
+  input:focus + label,
+  input:not(:placeholder-shown) + label,
+  textarea:focus + label,
+  textarea:not(:placeholder-shown) + label {
+    transform: translateY(-34px) scale(.92);
+    color: var(--accent2);
+    font-size:0.78rem;
+  }
+
+  /* make placeholder empty to allow :placeholder-shown detection */
+  input::placeholder, textarea::placeholder { color: transparent; opacity:0 }
+
+  /* rating stars (CSS only) */
+  .stars {
+    display:flex;
+    gap:6px;
+    align-items:center;
+    margin:8px 0 2px;
+  }
+  .stars input{
+    display:none;
+  }
+  .stars label{
+    cursor:pointer;
+    width:36px;
+    height:36px;
+    display:grid;
+    place-items:center;
+    border-radius:8px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 8px 18px rgba(2,6,23,0.44);
+    transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms;
+    color: var(--muted);
+    font-size:18px;
+  }
+  .stars label svg{ width:18px; height:18px; display:block; fill:currentColor; }
+
+  /* checked state: fill with accent and pop */
+  .stars input:checked ~ label,
+  .stars label:hover,
+  .stars label:hover ~ label { /* hover effect towards left */
+    transform: translateY(-6px) scale(1.05);
+    color: var(--accent1);
+    filter: drop-shadow(0 6px 20px rgba(110,231,183,0.08));
+    box-shadow: 0 14px 30px rgba(2,6,23,0.45);
+  }
+
+  /* submit */
+  .submit-row {
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:6px;
+  }
+  .btn {
+    display:inline-grid;
+    place-items:center;
+    padding:12px 18px;
+    border-radius:12px;
+    min-width:140px;
+    font-weight:600;
+    cursor:pointer;
+    border: none;
+    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+    color:#062036;
+    box-shadow: 0 10px 30px rgba(96,165,250,0.16), 0 2px 8px rgba(110,231,183,0.06);
+    transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms;
+  }
+  .btn:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 22px 44px rgba(96,165,250,0.2) }
+
+  .note {
+    font-size:0.82rem;
+    color:var(--muted);
+    text-align:left;
+  }
+
+  /* small screens */
+  @media (max-width:880px){
+    .card{ grid-template-columns: 1fr; padding:20px; gap:18px; }
+    .orb{ display:none }
+    .form-wrap{ transform: translateZ(40px) }
+    .brand{ gap:10px }
+  }
+
+  /* tiny screens */
+  @media (max-width:420px){
+    .logo{ height:48px; width:48px; border-radius:10px }
+    .headline{ font-size:1.25rem }
+    .card{ padding:16px; border-radius:14px }
+    .btn{ min-width:120px }
+  }
+
+  /* focus outlines for accessibility */
+  input:focus, textarea:focus, .stars label:focus {
+    outline: 3px solid rgba(96,165,250,0.12);
+    outline-offset: 3px;
+  }
+
+</style>
+</head>
+<body>
+  <main class="stage" aria-labelledby="feedbackTitle">
+    <section class="card" role="region" aria-label="Feedback form card">
+
+      <!-- Left info panel -->
+      <div class="card-left" aria-hidden="false">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">FB</div>
+          <div>
+            <h3 id="feedbackTitle">Share Feedback</h3>
+            <p>Help us improve — it only takes a moment.</p>
+          </div>
+        </div>
+
+        <h2 class="headline">We value your voice.</h2>
+        <p class="sub">Tell us what you liked, what we can do better, or any feature request. Your response is anonymous unless you provide contact info.</p>
+
+        <div class="note" aria-hidden="true">
+          <strong>Why this helps:</strong><br>
+          Quick feedback leads to improvements and better features for everyone.
+        </div>
+
+        <div class="orb" aria-hidden="true"></div>
+      </div>
+
+      <!-- Right form panel -->
+      <div class="form-wrap">
+        <!-- NOTE: change action to your endpoint (Formspree, Netlify, server, etc.) -->
+        <form action="https://formspree.io/f/mayvlrpg" method="POST" novalidate>
+          <!-- Name -->
+          <div class="field">
+            <input id="name" name="name" type="text" placeholder=" " autocomplete="name" />
+            <label for="name">Full name (optional)</label>
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <input id="email" name="email" type="email" placeholder=" " autocomplete="email" />
+            <label for="email">Email (optional)</label>
+          </div>
+
+          <!-- Rating (CSS-only star group) -->
+          <div class="field" aria-label="rating">
+            <label style="margin-bottom:8px; display:inline-block; color:var(--muted); font-size:0.9rem">Rate your experience</label>
+            <div class="stars" role="radiogroup" aria-labelledby="ratingLabel">
+              <!-- We use radio inputs but hide them; labels become clickable stars -->
+              <input type="radio" id="r5" name="rating" value="5" />
+              <label for="r5" title="Excellent" aria-label="5 stars">
+                <!-- star svg -->
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.605L19.336 24 12 19.902 4.664 24l1.586-8.645L.5 9.75l7.832-1.732z"/></svg>
+              </label>
+
+              <input type="radio" id="r4" name="rating" value="4" />
+              <label for="r4" title="Very good" aria-label="4 stars">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.605L19.336 24 12 19.902 4.664 24l1.586-8.645L.5 9.75l7.832-1.732z"/></svg>
+              </label>
+
+              <input type="radio" id="r3" name="rating" value="3" />
+              <label for="r3" title="Good" aria-label="3 stars">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.605L19.336 24 12 19.902 4.664 24l1.586-8.645L.5 9.75l7.832-1.732z"/></svg>
+              </label>
+
+              <input type="radio" id="r2" name="rating" value="2" />
+              <label for="r2" title="Fair" aria-label="2 stars">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.605L19.336 24 12 19.902 4.664 24l1.586-8.645L.5 9.75l7.832-1.732z"/></svg>
+              </label>
+
+              <input type="radio" id="r1" name="rating" value="1" />
+              <label for="r1" title="Poor" aria-label="1 star">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .587l3.668 7.431L23.5 9.75l-5.75 5.605L19.336 24 12 19.902 4.664 24l1.586-8.645L.5 9.75l7.832-1.732z"/></svg>
+              </label>
+            </div>
+          </div>
+
+          <!-- Feedback -->
+          <div class="field">
+            <textarea id="feedback" name="feedback" placeholder=" " rows="5" required></textarea>
+            <label for="feedback">What did you like or what can we improve?</label>
+          </div>
+
+          <!-- Submit area -->
+          <div class="submit-row">
+            <div class="note" style="padding-right:10px">We read every message — thank you ❤️</div>
+            <button class="btn" type="submit" aria-label="Send feedback">Send feedback</button>
+          </div>
+        </form>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>

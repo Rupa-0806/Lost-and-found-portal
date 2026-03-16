@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- 🌐 Navbar -->
+  <nav class="navbar">
+    <h2 class="logo">Lost & Found</h2>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#features">Categories</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+    </ul>
+    <div class="menu-toggle" id="menu-toggle">☰</div>
+  </nav>
+
+  <!-- 🏠 Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Welcome to the Lost and Found Portal</h1>
+      <p>Your one-stop solution to report or find lost items</p>
+      <div class="hero-buttons">
+        <a href="report.html" class="btn">Report Item</a>
+        <a href="find.html" class="btn">Find Lost Items</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⭐ Categories Section -->
+  <section id="features" class="features">
+    <h2>Our Categories</h2>
+    <div class="feature-cards">
+      <div class="card">
+        <h3>Electronics</h3>
+        <p>Report or find lost devices such as mobiles, laptops, and other gadgets.</p>
+      </div>
+      <div class="card">
+        <h3>Accessories</h3>
+        <p>Search and report items like bags, wallets, keys, and other personal belongings.</p>
+      </div>
+      <div class="card">
+        <h3>Documents</h3>
+        <p>Reunite important documents such as ID cards, certificates, and licenses with their owners.</p>
+      </div>
+    </div>
+  </section>
+  <div class="lost-items-container">
+  <h2>Reported Lost Items</h2>
+  <ul id="lostItemsList"></ul>
+</div>
+
+<script>
+const lostItemsList = document.getElementById('lostItemsList');
+
+// Fetch lost items from localStorage
+const lostItems = JSON.parse(localStorage.getItem('lostItems')) || [];
+
+if (lostItems.length === 0) {
+  lostItemsList.innerHTML = '<li>No lost items reported yet.</li>';
+} else {
+  lostItems.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${item.itemName}</strong> (${item.category}) - Last seen at ${item.location} on ${item.date}. Contact: ${item.contact}<br>Description: ${item.description}`;
+    lostItemsList.appendChild(li);
+  });
+}
+</script>
+<div class="claims-container">
+  <h2>Claimed Items</h2>
+  <ul id="claimsList"></ul>
+</div>
+
+<script>
+const claimsList = document.getElementById('claimsList');
+
+// Load and display lost item claims
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("itemContainer");
+      const claims = JSON.parse(localStorage.getItem("claims")) || [];
+
+      if (claims.length === 0) {
+        container.innerHTML = "<p>No lost items reported yet.</p>";
+        return;
+      }
+
+      claims.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "item-card";
+        div.innerHTML = `
+          <h3>Item #${index + 1}</h3>
+          <p><strong>Name:</strong> ${item.fullName}</p>
+          <p><strong>Email:</strong> ${item.email}</p>
+          <p><strong>Phone:</strong> ${item.phone}</p>
+          <p><strong>Item Details:</strong> ${item.itemDetails}</p>
+          <p><strong>Proof:</strong> ${item.proof}</p>
+        `;
+        container.appendChild(div);
+      });
+    });
+  </script>
+
+
+  <!-- 📞 Contact Section -->
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p>For support or queries, feel free to reach out.</p>
+    <a href="contact.html" class="btn contact-btn">Get in Touch</a>
+  </section>
+
+  <!-- 💬 Feedback Section -->
+  <section id="feedback" class="feedback">
+    <h2>Feedback</h2>
+    <p>We value your feedback! Share your thoughts with us to improve the portal.</p>
+    <a href="feedback.html" class="btn feedback-btn">Give Feedback</a>
+  </section>
+
+  <!-- ⚡ Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Lost & Found Portal | All Rights Reserved</p>
+  </footer>
+    <!-- ⭐ Testimonial Section -->
+  <section id="testimonials" class="testimonials">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-cards">
+      <div class="testimonial-card">
+        <p>"I found my lost wallet within 2 days using this portal. Truly a lifesaver!"</p>
+        <h4>- Ramesh K.</h4>
+      </div>
+      <div class="testimonial-card">
+        <p>"Reporting my lost phone was easy, and the community support was amazing."</p>
+        <h4>- Priya S.</h4>
+      </div>
+      <div class="testimonial-card">
+        <p>"Thanks to this platform, I was able to return important documents to their rightful owner."</p>
+        <h4>- Arjun M.</h4>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
